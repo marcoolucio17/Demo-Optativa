@@ -85,9 +85,8 @@ export default function ESGPage() {
         <div style={{ padding: "28px 32px", display: "flex", flexDirection: "column", gap: "24px" }}>
           {/* ── Hero Metrics ──────────────────────────────────────────────────── */}
           <div
+            className="esg-hero-grid"
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
               gap: "0",
               background: "var(--surface-card)",
               border: "1px solid var(--border-subtle)",
@@ -152,7 +151,7 @@ export default function ESGPage() {
           </div>
 
           {/* ── Charts Row ──────────────────────────────────────────────────────── */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+          <div className="esg-charts-grid">
             {/* Monthly Recovery Bar Chart */}
             <div
               style={{

@@ -119,11 +119,11 @@ export default function EquipmentDetailPage({ params }: PageProps) {
         </div>
 
         {/* ── Two-column layout ──────────────────────────────────────────────── */}
-        <div style={{ display: "flex", gap: "20px" }}>
+        <div className="eq-cols">
           {/* Left Card — Equipment Info */}
           <div
+            className="eq-left"
             style={{
-              flex: 1,
               background: "var(--surface-card)",
               border: "1px solid var(--border-subtle)",
               borderRadius: "6px",
@@ -238,14 +238,7 @@ export default function EquipmentDetailPage({ params }: PageProps) {
           </div>
 
           {/* Right Card — Monitoring Panel */}
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-            }}
-          >
+          <div className="eq-right">
             {/* Gas Integrity Gauge */}
             <div
               style={{
@@ -549,14 +542,11 @@ export default function EquipmentDetailPage({ params }: PageProps) {
 
         {/* ── Action Bar ─────────────────────────────────────────────────────── */}
         <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            padding: "20px 0 4px 0",
-            borderTop: "1px solid var(--border-subtle)",
-          }}
+          className="eq-actions"
+          style={{ padding: "20px 0 4px 0", borderTop: "1px solid var(--border-subtle)" }}
         >
           <button
+            className="eq-btn-full"
             style={{
               height: "42px",
               padding: "0 24px",

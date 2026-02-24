@@ -46,7 +46,7 @@ export default function DashboardPage() {
         }}
       >
         {/* ── KPI Row ──────────────────────────────────────────────────────── */}
-        <div style={{ display: "flex", gap: "16px" }}>
+        <div className="kpi-grid">
           <MetricCard
             label="Total equipos activos"
             value="847,392"
@@ -78,16 +78,9 @@ export default function DashboardPage() {
         </div>
 
         {/* ── Main Content Row ──────────────────────────────────────────────── */}
-        <div style={{ display: "flex", gap: "20px", flex: 1 }}>
+        <div className="dashboard-cols" style={{ flex: 1 }}>
           {/* Left 70% */}
-          <div
-            style={{
-              flex: "0 0 68%",
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-            }}
-          >
+          <div className="dashboard-left">
             {/* Mexico Map Placeholder */}
             <div
               style={{
@@ -313,14 +306,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Right 30% */}
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-            }}
-          >
+          <div className="dashboard-right">
             {/* Fleet Status Donut */}
             <div
               style={{

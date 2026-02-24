@@ -43,37 +43,207 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-h1,
-h2,
-h3 {
-  font-family: "Space Mono", monospace;
-}
-
-.mono-data {
-  font-family: "Roboto Mono", monospace;
-}
-
-.font-space {
-  font-family: "Space Mono", monospace;
-}
-
-.font-ibm {
-  font-family: "IBM Plex Sans", sans-serif;
-}
+h1, h2, h3 { font-family: "Space Mono", monospace; }
+.mono-data { font-family: "Roboto Mono", monospace; }
+.font-space { font-family: "Space Mono", monospace; }
+.font-ibm { font-family: "IBM Plex Sans", sans-serif; }
 
 /* ── Scrollbar ───────────────────────────────────────────────────────────────── */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--border-active); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE UTILITIES
+══════════════════════════════════════════════════════════════════════════════ */
+
+/* Sidebar: Desktop (>1024px) — full expanded */
+.sidebar-shell {
+  width: 220px;
+  min-width: 220px;
   background: var(--bg-secondary);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  flex-shrink: 0;
+  z-index: 40;
+  transition: width 0.2s ease;
 }
-::-webkit-scrollbar-thumb {
-  background: var(--border-active);
-  border-radius: 3px;
+.sidebar-label { display: inline; }
+.sidebar-logo-text { display: block; }
+/* Sidebar drawer — hidden on desktop/tablet, only shown on mobile via JS */
+.sidebar-drawer { display: none; }
+.sidebar-overlay { display: none; }
+
+/* Topbar height */
+.topbar-shell {
+  height: 56px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  flex-shrink: 0;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+.topbar-hamburger { display: none; }
+.topbar-breadcrumb { display: flex; align-items: center; gap: 6px; }
+
+/* KPI grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+/* Main dashboard two-column */
+.dashboard-cols { display: flex; gap: 20px; }
+.dashboard-left { flex: 0 0 68%; display: flex; flex-direction: column; gap: 20px; }
+.dashboard-right { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+.map-height { height: 280px; }
+
+/* ESG hero */
+.esg-hero-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.esg-charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+/* Equipment two-column */
+.eq-cols { display: flex; gap: 20px; }
+.eq-left { flex: 1; }
+.eq-right { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+.eq-actions { display: flex; gap: 12px; }
+.eq-btn-full { width: auto; }
+
+/* Settings layout */
+.settings-layout { display: flex; min-height: 0; flex: 1; }
+.settings-tabs-panel {
+  width: 240px;
+  min-width: 240px;
+  background: var(--surface-card);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.settings-content { flex: 1; padding: 28px; overflow-y: auto; background: var(--bg-base); }
+.settings-tab-label { display: inline; margin-left: 10px; }
+.settings-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.settings-centers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+/* Recovery step bar connecting lines */
+.step-line { display: block; }
+
+/* Table scroll wrapper */
+.table-scroll { overflow-x: auto; }
+
+/* Login columns */
+.login-left { flex: 0 0 60%; }
+.login-right { flex: 0 0 40%; }
+
+/* ── Tablet (641–1024px) ──────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .sidebar-shell {
+    width: 64px;
+    min-width: 64px;
+  }
+  .sidebar-label { display: none; }
+  .sidebar-logo-text { display: none; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-cols { flex-direction: column; }
+  .dashboard-left { flex: none; width: 100%; }
+  .dashboard-right { flex: none; width: 100%; }
+  .esg-hero-grid { grid-template-columns: repeat(2, 1fr); }
+  .esg-charts-grid { grid-template-columns: 1fr; }
+  .settings-centers-grid { grid-template-columns: repeat(2, 1fr); }
+  .login-left { flex: 0 0 50%; }
+  .login-right { flex: 0 0 50%; }
+}
+
+/* ── Mobile (0–640px) ────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Sidebar — hidden, replaced by drawer */
+  .sidebar-shell { display: none; }
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,14,20,0.6);
+    z-index: 48;
+  }
+  .sidebar-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    z-index: 50;
+    overflow-y: auto;
+    transform: translateX(-280px);
+    transition: transform 0.25s ease;
+  }
+  .sidebar-drawer.drawer-open { transform: translateX(0); }
+  .sidebar-label { display: inline; }
+  .sidebar-logo-text { display: block; }
+
+  /* Topbar */
+  .topbar-shell { height: 48px; padding: 0 16px; }
+  .topbar-hamburger { display: flex; }
+  .topbar-breadcrumb { display: none; }
+
+  /* KPIs */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .kpi-value-size { font-size: 24px !important; }
+
+  /* Dashboard main */
+  .dashboard-cols { flex-direction: column; }
+  .dashboard-left { flex: none; width: 100%; }
+  .dashboard-right { flex: none; width: 100%; }
+  .map-height { height: 200px !important; }
+
+  /* ESG */
+  .esg-hero-grid { grid-template-columns: repeat(2, 1fr); }
+  .esg-hero-value { font-size: 28px !important; }
+  .esg-charts-grid { grid-template-columns: 1fr; }
+  .esg-chart-height { height: 250px; }
+
+  /* Equipment detail */
+  .eq-cols { flex-direction: column; }
+  .eq-left { flex: none; width: 100%; }
+  .eq-right { flex: none; width: 100%; }
+  .eq-actions { flex-direction: column; }
+  .eq-btn-full { width: 100%; }
+
+  /* Recovery */
+  .step-line { display: none; }
+
+  /* Settings */
+  .settings-layout { flex-direction: column; }
+  .settings-tabs-panel {
+    width: 100%;
+    min-width: 0;
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+    height: auto;
+    flex-shrink: 0;
+  }
+  .settings-content { padding: 16px; }
+  .settings-tab-label { display: none; }
+  .settings-form-grid { grid-template-columns: 1fr; }
+  .settings-centers-grid { grid-template-columns: 1fr; }
+
+  /* Login */
+  .login-left { display: none; }
+  .login-right {
+    flex: 1 !important;
+    width: 100% !important;
+  }
 }
