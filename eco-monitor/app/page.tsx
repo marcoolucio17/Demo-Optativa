@@ -31,8 +31,8 @@ export default function LoginPage() {
       <div style={{ display: "flex", flex: 1 }}>
         {/* ── Left Column (60%) ─────────────────────────────────────────────── */}
         <div
+          className="login-left"
           style={{
-            flex: "0 0 60%",
             background: "var(--bg-base)",
             padding: "60px 64px",
             display: "flex",
@@ -216,17 +216,27 @@ export default function LoginPage() {
 
         {/* ── Right Column (40%) ────────────────────────────────────────────── */}
         <div
+          className="login-right"
           style={{
-            flex: "0 0 40%",
             background: "var(--surface-card)",
             border: "1px solid var(--border-subtle)",
             borderTop: "2px solid var(--accent-primary)",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            padding: "48px 48px",
           }}
         >
+          {/* Mobile-only logo (shown when left panel is hidden) */}
+          <div className="login-mobile-logo" style={{ marginBottom: "32px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+              <Hexagon size={28} strokeWidth={1.5} style={{ color: "var(--accent-primary)" }} />
+              <span className="font-space" style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>HFC TraceSystem</span>
+            </div>
+            <p style={{ margin: 0, fontSize: "13px", fontFamily: '"IBM Plex Sans", sans-serif', color: "var(--text-secondary)", lineHeight: "1.5" }}>
+              Trazabilidad certificada y cumplimiento ESG.
+            </p>
+          </div>
+
           {/* Form header */}
           <div style={{ marginBottom: "36px" }}>
             <h2
@@ -434,6 +444,7 @@ export default function LoginPage() {
 
       {/* Page footer strip */}
       <footer
+        className="login-footer"
         style={{
           height: "40px",
           background: "var(--bg-secondary)",
@@ -445,31 +456,13 @@ export default function LoginPage() {
           flexShrink: 0,
         }}
       >
-        <span
-          style={{
-            fontSize: "11px",
-            fontFamily: '"IBM Plex Sans", sans-serif',
-            color: "var(--text-muted)",
-          }}
-        >
+        <span style={{ fontSize: "11px", fontFamily: '"IBM Plex Sans", sans-serif', color: "var(--text-muted)" }}>
           © 2025 HFC TraceSystem
         </span>
-        <span
-          style={{
-            fontSize: "11px",
-            fontFamily: '"IBM Plex Sans", sans-serif',
-            color: "var(--text-muted)",
-          }}
-        >
+        <span className="login-footer-cert" style={{ fontSize: "11px", fontFamily: '"IBM Plex Sans", sans-serif', color: "var(--text-muted)" }}>
           SEMARNAT | NOM-161 | VERRA Certified
         </span>
-        <span
-          style={{
-            fontSize: "11px",
-            fontFamily: '"IBM Plex Sans", sans-serif',
-            color: "var(--text-muted)",
-          }}
-        >
+        <span style={{ fontSize: "11px", fontFamily: '"IBM Plex Sans", sans-serif', color: "var(--text-muted)" }}>
           v1.0.0
         </span>
       </footer>

@@ -141,7 +141,8 @@ h1, h2, h3 { font-family: "Space Mono", monospace; }
 
 /* Login columns */
 .login-left { flex: 0 0 60%; }
-.login-right { flex: 0 0 40%; }
+.login-right { flex: 0 0 40%; padding: 48px; }
+.login-mobile-logo { display: none; }
 
 /* ── Tablet (641–1024px) ──────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
@@ -245,5 +246,11 @@ h1, h2, h3 { font-family: "Space Mono", monospace; }
   .login-right {
     flex: 1 !important;
     width: 100% !important;
+    padding: 36px 24px !important;
+    justify-content: flex-start !important;
+    padding-top: 48px !important;
   }
+  .login-mobile-logo { display: block; }
+  .login-footer-cert { display: none; }
+  footer.login-footer { padding: 0 16px !important; height: auto !important; padding-top: 10px !important; padding-bottom: 10px !important; }
 }
