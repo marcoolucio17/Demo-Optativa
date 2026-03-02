@@ -1,6 +1,7 @@
 "use client";
 import { Bell, User, Menu } from "lucide-react";
 import { useMobileMenu } from "../context/MobileMenu";
+import LiveClock from "./LiveClock";
 
 interface TopbarProps {
   breadcrumb: string[];
@@ -45,8 +46,13 @@ export default function Topbar({ breadcrumb }: TopbarProps) {
         </div>
       </div>
 
-      {/* Right icons */}
+      {/* Right: clock + icons */}
       <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        {/* Live clock — hidden on mobile via CSS */}
+        <div className="topbar-breadcrumb">
+          <LiveClock />
+        </div>
+
         <button
           style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", display: "flex", alignItems: "center", position: "relative", padding: "4px" }}
           onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-secondary)")}

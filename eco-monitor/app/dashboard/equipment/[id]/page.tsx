@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useState, useEffect } from "react";
 import Topbar from "../../../components/Topbar";
 import StatusPill from "../../../components/StatusPill";
 import { equipment, temperatureHistory, alertHistory } from "../../../lib/data";
@@ -15,6 +15,7 @@ import {
   RadialBarChart,
   RadialBar,
 } from "recharts";
+import { motion } from "framer-motion";
 import { Camera, AlertTriangle, AlertCircle, Info, Calendar } from "lucide-react";
 
 const gasTypeColor: Record<string, string> = {
@@ -28,6 +29,12 @@ function getIntegrityColor(pct: number): string {
   if (pct > 60) return "var(--accent-primary)";
   if (pct >= 30) return "var(--accent-warning)";
   return "var(--accent-danger)";
+}
+
+function getIntegrityLabel(pct: number): { text: string; color: string } {
+  if (pct > 60) return { text: "Óptimo", color: "var(--accent-primary)" };
+  if (pct >= 30) return { text: "Revisar", color: "var(--accent-warning)" };
+  return { text: "Crítico", color: "var(--accent-danger)" };
 }
 
 function getLifeColor(pct: number): string {
@@ -56,8 +63,16 @@ export default function EquipmentDetailPage({ params }: PageProps) {
   const { id } = use(params);
   const eq = equipment.find((e) => e.id === id) ?? equipment[0];
 
-  const integrityColor = getIntegrityColor(eq.integrityPercent);
-  const radialData = [{ value: eq.integrityPercent, fill: integrityColor }];
+  // ── Feature 6: Gauge animation — animate from 0 to actual value ───────────
+  const [gaugeValue, setGaugeValue] = useState(0);
+  useEffect(() => {
+    const t = setTimeout(() => setGaugeValue(eq.integrityPercent), 300);
+    return () => clearTimeout(t);
+  }, [eq.integrityPercent]);
+
+  const integrityColor = getIntegrityColor(gaugeValue);
+  const integrityLabel = getIntegrityLabel(eq.integrityPercent);
+  const radialData = [{ value: gaugeValue, fill: integrityColor }];
 
   const tooltipStyle = {
     background: "var(--surface-elevated)",
@@ -175,23 +190,13 @@ export default function EquipmentDetailPage({ params }: PageProps) {
             </div>
 
             {/* Info rows */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0",
-              }}
-            >
+            <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
               {[
                 { label: "Modelo", value: eq.model },
                 { label: "Marca", value: eq.brand },
                 { label: "Fecha de instalación", value: eq.installationDate },
                 { label: "Antigüedad", value: `${eq.age} años` },
-                {
-                  label: "Tipo de gas",
-                  value: eq.gasType,
-                  colored: true,
-                },
+                { label: "Tipo de gas", value: eq.gasType, colored: true },
                 { label: "Carga de gas", value: `${eq.gasCharge} kg` },
                 { label: "Último servicio", value: eq.lastServiceDate },
                 { label: "Técnico asignado", value: eq.technician },
@@ -239,7 +244,7 @@ export default function EquipmentDetailPage({ params }: PageProps) {
 
           {/* Right Card — Monitoring Panel */}
           <div className="eq-right">
-            {/* Gas Integrity Gauge */}
+            {/* Feature 6: Gas Integrity Gauge with animation */}
             <div
               style={{
                 background: "var(--surface-card)",
@@ -265,7 +270,17 @@ export default function EquipmentDetailPage({ params }: PageProps) {
                   gap: "24px",
                 }}
               >
-                <div style={{ position: "relative", width: "120px", height: "120px", flexShrink: 0 }}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  style={{
+                    position: "relative",
+                    width: "120px",
+                    height: "120px",
+                    flexShrink: 0,
+                  }}
+                >
                   <ResponsiveContainer width={120} height={120}>
                     <RadialBarChart
                       innerRadius={36}
@@ -278,30 +293,49 @@ export default function EquipmentDetailPage({ params }: PageProps) {
                         dataKey="value"
                         cornerRadius={4}
                         background={{ fill: "var(--surface-elevated)" }}
+                        isAnimationActive={true}
+                        animationDuration={1000}
+                        animationBegin={300}
                       />
                     </RadialBarChart>
                   </ResponsiveContainer>
+                  {/* Center label — Feature 6 */}
                   <div
                     style={{
                       position: "absolute",
                       inset: 0,
                       display: "flex",
+                      flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
+                      gap: "2px",
                     }}
                   >
                     <span
                       className="mono-data"
                       style={{
-                        fontSize: "18px",
+                        fontSize: "16px",
                         fontWeight: 700,
                         color: integrityColor,
+                        lineHeight: 1,
                       }}
                     >
                       {eq.integrityPercent}%
                     </span>
+                    <span
+                      style={{
+                        fontSize: "9px",
+                        fontFamily: '"IBM Plex Sans", sans-serif',
+                        color: integrityLabel.color,
+                        fontWeight: 600,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      {integrityLabel.text}
+                    </span>
                   </div>
-                </div>
+                </motion.div>
                 <div style={{ flex: 1 }}>
                   <p
                     style={{
@@ -317,12 +351,19 @@ export default function EquipmentDetailPage({ params }: PageProps) {
                       ? "Integridad reducida. Requiere atención preventiva."
                       : "Estado crítico. Programar retiro inmediato."}
                   </p>
+                  <StatusPill
+                    value={eq.integrityPercent}
+                    type="integrity"
+                  />
                 </div>
               </div>
             </div>
 
-            {/* Temperature History */}
-            <div
+            {/* Feature 9: Temperature History Chart with animation */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
               style={{
                 background: "var(--surface-card)",
                 border: "1px solid var(--border-subtle)",
@@ -378,10 +419,13 @@ export default function EquipmentDetailPage({ params }: PageProps) {
                     strokeWidth={2}
                     dot={{ r: 3, fill: "var(--accent-secondary)", strokeWidth: 0 }}
                     activeDot={{ r: 4 }}
+                    isAnimationActive={true}
+                    animationDuration={1500}
+                    animationEasing="ease-out"
                   />
                 </LineChart>
               </ResponsiveContainer>
-            </div>
+            </motion.div>
 
             {/* Remaining Life */}
             <div
@@ -449,6 +493,9 @@ export default function EquipmentDetailPage({ params }: PageProps) {
               >
                 Instalado: {eq.installationDate} · {eq.age} años en servicio
               </p>
+              <div style={{ marginTop: "10px" }}>
+                <StatusPill value={eq.age} type="age" />
+              </div>
             </div>
 
             {/* Alert History */}
@@ -470,7 +517,9 @@ export default function EquipmentDetailPage({ params }: PageProps) {
               >
                 Historial de alertas
               </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+              >
                 {alertHistory.map((alert) => {
                   const Icon = alertIconMap[alert.type];
                   const color = alertColorMap[alert.type];
@@ -543,7 +592,10 @@ export default function EquipmentDetailPage({ params }: PageProps) {
         {/* ── Action Bar ─────────────────────────────────────────────────────── */}
         <div
           className="eq-actions"
-          style={{ padding: "20px 0 4px 0", borderTop: "1px solid var(--border-subtle)" }}
+          style={{
+            padding: "20px 0 4px 0",
+            borderTop: "1px solid var(--border-subtle)",
+          }}
         >
           <button
             className="eq-btn-full"
@@ -612,10 +664,12 @@ export default function EquipmentDetailPage({ params }: PageProps) {
               cursor: "pointer",
             }}
             onMouseEnter={(e) =>
-              ((e.currentTarget as HTMLElement).style.color = "var(--text-primary)")
+              ((e.currentTarget as HTMLElement).style.color =
+                "var(--text-primary)")
             }
             onMouseLeave={(e) =>
-              ((e.currentTarget as HTMLElement).style.color = "var(--text-secondary)")
+              ((e.currentTarget as HTMLElement).style.color =
+                "var(--text-secondary)")
             }
           >
             Ver Historial

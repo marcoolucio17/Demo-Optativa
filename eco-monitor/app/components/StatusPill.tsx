@@ -1,6 +1,8 @@
 interface StatusPillProps {
-  status: "active" | "warning" | "critical" | "pending";
+  status?: "active" | "warning" | "critical" | "pending";
   label?: string;
+  value?: number;
+  type?: "age" | "integrity" | "capacity";
 }
 
 const statusConfig = {
@@ -26,8 +28,35 @@ const statusConfig = {
   },
 };
 
-export default function StatusPill({ status, label }: StatusPillProps) {
-  const config = statusConfig[status];
+function getDynamicStatus(
+  value: number,
+  type: "age" | "integrity" | "capacity"
+): "active" | "warning" | "critical" {
+  if (type === "age") {
+    if (value < 8) return "active";
+    if (value <= 10) return "warning";
+    return "critical";
+  }
+  if (type === "integrity") {
+    if (value > 60) return "active";
+    if (value >= 30) return "warning";
+    return "critical";
+  }
+  // capacity
+  if (value < 70) return "active";
+  if (value <= 90) return "warning";
+  return "critical";
+}
+
+export default function StatusPill({ status, label, value, type }: StatusPillProps) {
+  // Determine resolved status
+  const resolvedStatus: "active" | "warning" | "critical" | "pending" =
+    value !== undefined && type !== undefined
+      ? getDynamicStatus(value, type)
+      : status ?? "active";
+
+  const config = statusConfig[resolvedStatus];
+
   return (
     <span
       style={{
@@ -42,6 +71,8 @@ export default function StatusPill({ status, label }: StatusPillProps) {
         fontFamily: '"IBM Plex Sans", sans-serif',
         fontWeight: 500,
         whiteSpace: "nowrap",
+        transition:
+          "background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease",
       }}
     >
       {label ?? config.label}
