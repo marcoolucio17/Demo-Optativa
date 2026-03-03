@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import Topbar from "../components/Topbar";
 import StatusPill from "../components/StatusPill";
 import AnimatedCounter from "../components/AnimatedCounter";
@@ -26,6 +27,35 @@ import {
   regionalCompliance,
   equipment,
 } from "../lib/data";
+
+const DynamicFleetMap = dynamic(
+  () => import("../components/FleetMap"),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "var(--surface-card)",
+        }}
+      >
+        <span
+          style={{
+            color: "var(--text-muted)",
+            fontFamily: '"Space Mono", monospace',
+            fontSize: "13px",
+          }}
+        >
+          Cargando mapa...
+        </span>
+      </div>
+    ),
+  }
+);
 
 const gasBarColors: Record<string, string> = {
   "R-134a": "var(--accent-primary)",
@@ -484,140 +514,14 @@ export default function DashboardPage() {
               <div
                 className="map-height"
                 style={{
-                  background: "var(--surface-elevated)",
-                  border: "1px solid var(--border-active)",
-                  borderRadius: "4px",
-                  position: "relative",
+                  background: "var(--bg-base)",
+                  border: "1px solid var(--border-subtle)",
+                  borderRadius: "6px",
                   overflow: "hidden",
+                  height: "400px",
                 }}
               >
-                <svg
-                  viewBox="0 0 600 400"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    position: "absolute",
-                    inset: 0,
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M 50 80 L 180 60 L 320 50 L 420 70 L 480 100 L 540 130 L 560 160 L 540 200 L 500 230 L 460 260 L 420 280 L 380 320 L 340 340 L 300 350 L 260 340 L 240 360 L 200 340 L 180 320 L 160 300 L 140 280 L 100 260 L 70 230 L 50 200 L 40 160 L 50 80 Z"
-                    fill="var(--border-subtle)"
-                    stroke="var(--border-active)"
-                    strokeWidth="1.5"
-                  />
-
-                  {equipment.map((eq) => {
-                    const dotColor =
-                      eq.status === "active"
-                        ? "#00e5a0"
-                        : eq.status === "warning"
-                        ? "#ff6b35"
-                        : "#ff3b5c";
-                    const x =
-                      ((eq.coordinates.lng + 118) / 22) * 520 + 30;
-                    const y =
-                      ((32.8 - eq.coordinates.lat) / 18) * 300 + 40;
-                    return (
-                      <g key={eq.id}>
-                        {/* Animated pulse ring */}
-                        {eq.status === "critical" && (
-                          <circle
-                            cx={x}
-                            cy={y}
-                            r="7"
-                            fill="#ff3b5c"
-                            className="dot-critical-pulse"
-                          />
-                        )}
-                        {eq.status === "warning" && (
-                          <circle
-                            cx={x}
-                            cy={y}
-                            r="7"
-                            fill="#ff6b35"
-                            className="dot-warning-pulse"
-                          />
-                        )}
-                        {/* Solid inner dot */}
-                        <circle
-                          cx={x}
-                          cy={y}
-                          r="5"
-                          fill={dotColor}
-                          opacity="0.9"
-                        />
-                      </g>
-                    );
-                  })}
-                </svg>
-
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "12px",
-                    left: "12px",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: "11px",
-                      fontFamily: '"IBM Plex Sans", sans-serif',
-                      color: "var(--text-muted)",
-                    }}
-                  >
-                    Mostrando {equipment.length} equipos de muestra
-                  </span>
-                </div>
-              </div>
-
-              {/* Feature 7: Legend */}
-              <div
-                style={{
-                  display: "flex",
-                  gap: "20px",
-                  marginTop: "12px",
-                  flexWrap: "wrap",
-                  alignItems: "center",
-                }}
-              >
-                {[
-                  {
-                    color: "#ff3b5c",
-                    label: "Crítico (pulso rápido)",
-                  },
-                  { color: "#ff6b35", label: "Atención" },
-                  { color: "#00e5a0", label: "Activo" },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "7px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "9px",
-                        height: "9px",
-                        borderRadius: "50%",
-                        background: item.color,
-                        flexShrink: 0,
-                      }}
-                    />
-                    <span
-                      style={{
-                        fontSize: "11px",
-                        fontFamily: '"IBM Plex Sans", sans-serif',
-                        color: "var(--text-secondary)",
-                      }}
-                    >
-                      {item.label}
-                    </span>
-                  </div>
-                ))}
+                <DynamicFleetMap equipment={equipment} />
               </div>
             </div>
 

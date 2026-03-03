@@ -111,6 +111,63 @@ h1, h2, h3 { font-family: "Space Mono", monospace; }
   to   { width: 67%; }
 }
 
+/* ── Leaflet Map: Critical marker pulse ──────────────────────────────────── */
+.marker-critical { position: relative; }
+.marker-pulse {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 59, 92, 0.3);
+  animation: marker-pulse 1.5s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes marker-pulse {
+  0%   { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2);   opacity: 0; }
+}
+
+/* ── Leaflet Map: Popup overrides (dark theme) ───────────────────────────── */
+.leaflet-popup-content-wrapper {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 6px !important;
+}
+.leaflet-popup-tip { display: none !important; }
+.leaflet-popup-content { margin: 0 !important; }
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--text-muted) !important;
+  font-size: 18px !important;
+  top: 6px !important;
+  right: 6px !important;
+}
+.leaflet-container a.leaflet-popup-close-button:hover {
+  color: var(--text-primary) !important;
+}
+/* Dark zoom controls */
+.leaflet-bar a {
+  background: var(--surface-elevated) !important;
+  color: var(--text-secondary) !important;
+  border-color: var(--border-subtle) !important;
+}
+.leaflet-bar a:hover {
+  background: var(--surface-card) !important;
+  color: var(--text-primary) !important;
+}
+/* Attribution */
+.leaflet-control-attribution {
+  background: rgba(10, 14, 20, 0.7) !important;
+  color: var(--text-muted) !important;
+  font-size: 9px !important;
+}
+.leaflet-control-attribution a {
+  color: var(--text-muted) !important;
+}
+
 /* ── Accessibility: Reduced motion ────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   * {
