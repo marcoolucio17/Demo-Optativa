@@ -50,7 +50,7 @@ const TICKER_ITEMS = [
   { text: "📋 Cumplimiento NOM-161 activo en 6 regiones" },
   { text: "💰 $2,034,150 USD en créditos de carbono generados" },
   { text: "🔄 3 centros de acopio operando en ZMM" },
-  { text: "📊 Meta anual 2024: 67% completada" },
+  { text: "📊 Meta anual 2026: 67% completada" },
 ];
 
 const CREDIT_DAILY_GOAL = 150;
@@ -234,7 +234,7 @@ export default function ESGPage() {
                 fontWeight: 700,
               }}
             >
-              Reporte de Impacto Ambiental 2024
+              Reporte de Impacto Ambiental 2026
             </h2>
             {/* Feature 5: Last updated */}
             <div

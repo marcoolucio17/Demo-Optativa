@@ -7,7 +7,7 @@ const toastMessages: Array<() => void> = [
   () => toast.success("12 equipos procesados en Centro Apodaca"),
   () => toast.error("Alerta crítica: Equipo GD-1923 supera vida útil"),
   () => toast.info("Nuevo retiro programado — Walmart Guadalupe"),
-  () => toast.success("Certificado ESG generado — Lote #2024-441"),
+  () => toast.success("Certificado ESG generado — Lote #2026-441"),
   () => toast.warning("Centro Guadalupe al 85% de capacidad"),
   () => toast.info("Técnico R. González completó 8 retiros hoy"),
   () => toast.success("38.4 ton CO₂e evitadas este mes"),

@@ -655,7 +655,7 @@ export default function RecoveryPage() {
                     onChange={(e) => setSemarnatNum(e.target.value)}
                     onFocus={() => setFocusedField("sema")}
                     onBlur={() => setFocusedField(null)}
-                    placeholder="SEMA-2024-MX-XXXXX"
+                    placeholder="SEMA-2026-MX-XXXXX"
                     style={inputStyle(focusedField === "sema")}
                   />
                 </div>
@@ -666,7 +666,7 @@ export default function RecoveryPage() {
                     onChange={(e) => setRetcNum(e.target.value)}
                     onFocus={() => setFocusedField("retc")}
                     onBlur={() => setFocusedField(null)}
-                    placeholder="RETC-2024-XXX-XX"
+                    placeholder="RETC-2026-XXX-XX"
                     style={inputStyle(focusedField === "retc")}
                   />
                 </div>

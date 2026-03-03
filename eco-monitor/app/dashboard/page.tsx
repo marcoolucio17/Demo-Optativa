@@ -332,7 +332,7 @@ export default function DashboardPage() {
                 margin: 0,
               }}
             >
-              CO₂e evitado 2024
+              CO₂e evitado 2026
             </p>
             <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
               <AnimatedCounter
@@ -741,7 +741,7 @@ export default function DashboardPage() {
                     color: "var(--text-muted)",
                   }}
                 >
-                  Meta anual de recuperación 2024
+                  Meta anual de recuperación 2026
                 </p>
 
                 <div
@@ -801,7 +801,7 @@ export default function DashboardPage() {
                       color: "var(--text-muted)",
                     }}
                   >
-                    Meta: Dic 2024
+                    Meta: Dic 2026
                   </span>
                 </div>
               </div>
